@@ -1,10 +1,8 @@
-from flask import Flask, render_template, flash, redirect, url_for
-from forms import RegistrationForm, LoginForm
-from config import SECRET_KEY
+from main.forms import RegistrationForm, LoginForm
+from main.models import User, Project, Task
+from flask import render_template, flash, redirect, url_for
+from main import app
 
-app = Flask(__name__)
-
-app.config['SECRET_KEY'] = SECRET_KEY
 
 @app.route("/")
 def hello():
@@ -22,7 +20,7 @@ def home():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'success')
+        flash(f'Account created for {form.name.data}!', 'success')
         return redirect(url_for('home'))
     return render_template('register.html', title='Register', form=form)\
 
@@ -40,6 +38,5 @@ def login():
 
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
 

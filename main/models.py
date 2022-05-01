@@ -1,13 +1,9 @@
 from datetime import datetime
+from main import db
 
-from flask_sqlalchemy import SQLAlchemy
-
-from app import app
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pmapp.db'
-db = SQLAlchemy(app)
 
 class User(db.Model):
+    __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
