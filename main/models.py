@@ -1,19 +1,27 @@
 from datetime import datetime
-from main import db
+from main import db, login_manager
+from flask_login import UserMixin
 
 
-class User(db.Model):
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+class User(db.Model, UserMixin):
     __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
     email = db.Column(db.String(250), unique=True, nullable=False)
+    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(250), nullable=False)
     projects = db.relationship('Project', backref='manager', lazy=True)
     tasks = db.relationship('Task', backref='executor', lazy=True)
 
     def __repr__(self):
         return f"User('{self.name}', '{self.email}')"
+
 
 class Project(db.Model):
     __tablename__ = "project"
@@ -35,6 +43,7 @@ class Project(db.Model):
             'name': self.name
         }
 
+
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
@@ -53,5 +62,3 @@ class Task(db.Model):
             'name': self.name,
             'content': self.content
         }
-
-
