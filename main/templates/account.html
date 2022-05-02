@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block center %}
+<!--<a href="/gdisconnect">Log out</a>-->
+<div class="row">
+  <div class="col">
+    <span class="title" style="font-size: 24px;">Account information</span>
+  </div>
+</div>
+
+<h1>{{ current_user.name }}</h1>
+{% endblock %}
