@@ -1,8 +1,11 @@
 nav a {
-    color:  #FFFFFF;
+    color:  #943153;
 }
 
-
+.bg-primary
+{
+    background-color: #943153!important;
+}
 
 .center-box {
     margin-top: 10px;
@@ -15,6 +18,7 @@ nav a {
 
 .title {
     font-size: 24px;
+    margin-bottom: 10px;
 }
 
 .new-project-button {
@@ -37,4 +41,39 @@ form {
   border: 1px solid #dddddd;
   border-radius: 3px;
   margin-bottom: 20px;
+}
+
+.project-border
+{
+    border: 1px solid #dddddd;
+    cursor: pointer;
+    border-radius: 7px;
+    margin: 2px;
+    color: #FFFDD0;
+    background-color: #ED9F4E;
+}
+
+.border-link:hover
+{
+    text-decoration: none;
+}
+
+.project-border-link
+{
+    border: 2px solid #dddddd;
+    cursor: pointer;
+    border-radius: 7px;
+    margin: 2px;
+    color: #FFFDD0;
+    background-color: #ED9F4E;
+}
+
+.border-link:hover
+{
+    text-decoration: none;
+}
+
+.btn
+{
+    background-color: #943153;
 }

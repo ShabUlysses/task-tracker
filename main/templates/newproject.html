@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block center %}
+
+<div class="content-section">
+        <form method="POST", action="">
+            {{ form.hidden_tag()}}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">New project</legend>
+                <div class="form-group">
+                    {{ form.project_name.label(class="form-control-label") }}
+                    {% if form.project_name.errors %}
+                        {{ form.project_name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.project_name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.project_name(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.content.label(class="form-control-label") }}
+
+                    {% if form.content.errors %}
+                        {{ form.content(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.content.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.content(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.users.label(class="form-control-label") }}
+
+                    {% if form.users.errors %}
+                        {{ form.users(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.users.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.users(class="form-control selectpicker", multiple="multiple") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.date_due.label(class="form-control-label") }}
+
+                    {% if form.date_due.errors %}
+                        {{ form.date_due(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.date_due.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.date_due(class="datepicker") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+</div>
+
+{% endblock %}

@@ -28,6 +28,7 @@ class Project(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
+    content = db.Column(db.String(500))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     users = db.Column(db.String(250), nullable=False)
     task = db.relationship('Task', cascade='all, delete-orphan')
@@ -35,7 +36,7 @@ class Project(db.Model):
     date_end = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
-        return f"Project name:('{self.name}', manager:'{self.manager}')"
+        return f"Project name:('{self.name}', manager: '{self.manager.name}', users: '{self.users}', date_end: '{self.date_end}')"
 
     @property
     def serialize(self):
