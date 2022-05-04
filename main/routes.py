@@ -5,9 +5,7 @@ from main import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
 
 
-@app.before_first_request
-def create_tables():
-    db.create_all()
+
 
 @app.route("/")
 def hello():
