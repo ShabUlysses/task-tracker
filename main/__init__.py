@@ -18,3 +18,4 @@ login_manager.login_message_category = 'info'
 
 
 from main import routes
+

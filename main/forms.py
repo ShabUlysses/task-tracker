@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, SelectMultipleField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, InputRequired
-from main.models import User
+from main.models import User, Project
 from wtforms.fields import DateField
 
 class RegistrationForm(FlaskForm):
@@ -29,6 +29,7 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember me')
     submit = SubmitField('Login')
 
+
 class ProjectForm(FlaskForm):
     users_list = [user.name for user in User.query.all()]
 
@@ -41,3 +42,12 @@ class ProjectForm(FlaskForm):
                          validators=[InputRequired(), DataRequired()])
     submit = SubmitField('Create project')
 
+
+class TaskForm(FlaskForm):
+    task_name = StringField('Task name',
+                            validators=[DataRequired()])
+    task_description = TextAreaField('Description of the task',
+                                     validators=[DataRequired()])
+    date_due = DateField('What is the deadline on this task?', format='%Y-%m-%d',
+                         validators=[InputRequired(), DataRequired()])
+    submit = SubmitField('Create task')

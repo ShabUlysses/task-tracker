@@ -1,9 +1,13 @@
-from main.forms import RegistrationForm, LoginForm, ProjectForm
+from main.forms import RegistrationForm, LoginForm, ProjectForm, TaskForm
 from main.models import User, Project, Task
 from flask import render_template, flash, redirect, url_for, request
 from main import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
 
+
+@app.before_first_request
+def create_tables():
+    db.create_all()
 
 @app.route("/")
 def hello():
@@ -125,9 +129,29 @@ def delete_project(project_name):
     return render_template('deleteproject.html', project_name=project_name)
 
 
-@app.route("/project/<string:project_name>/task/new")
+@app.route(("/project/<string:project_name>/task/<string:task_name>"))
+@login_required
+def task(project_name, task_name):
+    projects = Project.query.all()
+    task = Task.query.filter_by(name=task_name).first()
+    return render_template('task', projects=projects, task=task)
+
+
+@app.route("/project/<string:project_name>/task/new", methods=['POST', 'GET'])
 @login_required
 def new_task(project_name):
-    return render_template('index')
+    project = Project.query.filter_by(name=project_name).first()
+    project_users = project.users.split(',')
+    print(project_users)
+    form = TaskForm()
+    if current_user != project.manager:
+        flash('You cannot add tasks to this project.')
+        return redirect(url_for('project', project_name=project_name))
+    if form.validate_on_submit():
+        task = Task(name=form.task_name.data, content=form.task_description.data,
+                    executor=request.form['executor'], date_end=form.date_due.data)
+        db.session.commit()
+        return redirect(url_for('task', project_name=project.name, task_name=form.task_name.data))
+    return render_template('newtask.html', form=form, users=project_users)
 
 
