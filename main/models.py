@@ -16,8 +16,10 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(250), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(250), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
     projects = db.relationship('Project', backref='manager', lazy=True)
     tasks = db.relationship('Task', backref='manager', lazy=True)
+
 
     def __repr__(self):
         return f"User('{self.name}', '{self.email}')"

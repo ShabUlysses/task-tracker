@@ -72,7 +72,7 @@
 
 <ul class="list-group">
 {% for user in users %}
-  <li class="list-group-item mb-1">{{user}}</a></li>
+  <li class="list-group-item mb-1"><a href="{{ url_for('userpage', user_name=user) }}">{{user}}</a></li>
 {% endfor %}
 
 <!-- show a list of tasks within this project -->

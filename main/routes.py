@@ -19,14 +19,15 @@ def home():
 @login_required
 def index():
     projects = Project.query.all()
-    return render_template('index.html', projects=projects)
+    return render_template('index.html', projects=projects, current_user=current_user)
 
 @app.route('/users')
 @login_required
 def users():
     projects = Project.query.all()
     all_users = User.query.all()
-    return render_template('users.html', projects=projects, users=all_users)
+    return render_template('users.html', projects=projects,
+                           users=all_users, current_user=current_user)
 
 @app.route("/user/<string:user_name>")
 @login_required
@@ -34,7 +35,8 @@ def userpage(user_name):
     projects = Project.query.all()
     tasks = Task.query.all()
     return render_template('userpage.html', projects=projects,
-                           username=user_name, tasks=tasks, Project=Project)
+                           username=user_name, tasks=tasks,
+                           Project=Project, current_user=current_user)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -48,7 +50,7 @@ def register():
         db.session.commit()
         flash(f'Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)\
+    return render_template('register.html', title='Register', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -87,7 +89,7 @@ def project(project_name):
     return render_template('project.html', projects=projects,
                            u_project_name=project.name, users=users,
                            manager=project.manager, content=project.content, start_date=project.date_created,
-                           end_date=project.date_end, tasks=tasks, complete=project.completion)
+                           end_date=project.date_end, tasks=tasks, complete=project.completion, current_user=current_user)
 
 
 @app.route("/project/new", methods=['POST', 'GET'])
@@ -102,7 +104,7 @@ def new_project():
         db.session.commit()
         flash('Project has been successfully created!', 'success')
         return redirect(url_for('project', project_name=form.project_name.data))
-    return render_template('newproject.html', form=form)
+    return render_template('newproject.html', form=form, current_user=current_user)
 
 
 @app.route("/project/<string:project_name>/completion", methods=['POST', 'GET'])
@@ -144,7 +146,8 @@ def edit_project(project_name):
         form.content.data = project.content
         form.users.data = project.users
         form.date_due.data = project.date_end
-    return render_template('editproject.html', project_name=project_name, form=form)
+    return render_template('editproject.html', project_name=project_name,
+                           form=form, current_user=current_user)
 
 
 @app.route("/project/<string:project_name>/delete", methods=['POST', 'GET'])
@@ -159,7 +162,7 @@ def delete_project(project_name):
         db.session.commit()
         flash('Your project has been deleted!', 'success')
         return redirect(url_for('index'))
-    return render_template('deleteproject.html', project_name=project_name)
+    return render_template('deleteproject.html', project_name=project_name, current_user=current_user)
 
 
 @app.route(("/project/<string:project_name>/task/<string:task_name>"))
@@ -169,7 +172,8 @@ def task(project_name, task_name):
     task = Task.query.filter_by(name=task_name).first()
     return render_template('task.html', projects=projects, task=task, project_name=project_name,
                            task_name=task.name, task_description=task.content, executor=task.executor,
-                           end_date=task.date_end, start_date=task.date_created, complete=task.completion)
+                           end_date=task.date_end, start_date=task.date_created, complete=task.completion,
+                           current_user=current_user)
 
 
 @app.route("/project/<string:project_name>/task/new", methods=['POST', 'GET'])
@@ -179,7 +183,7 @@ def new_task(project_name):
     project_users = project.users.split(',')
     form = TaskForm()
     if current_user != project.manager:
-        flash('You cannot add tasks to this project.')
+        flash('You cannot add tasks to this project.', 'danger')
         return redirect(url_for('project', project_name=project_name))
     if form.validate_on_submit():
         task = Task(name=form.task_name.data, content=form.task_description.data, project_id=project.id,
@@ -188,7 +192,8 @@ def new_task(project_name):
         db.session.commit()
         flash('Task has been successfully created!', 'success')
         return redirect(url_for('task', project_name=project.name, task_name=task.name))
-    return render_template('newtask.html', form=form, users=project_users, project_name=project.name)
+    return render_template('newtask.html', form=form, users=project_users,
+                           project_name=project.name, current_user=current_user)
 
 
 @app.route("/project/<string:project_name>/task/<string:task_name>/complete", methods=['POST', 'GET'])
@@ -227,7 +232,7 @@ def edit_task(project_name, task_name):
         form.task_description.data = task.content
         form.date_due.data = task.date_end
     return render_template('edittask.html', project_name=project_name, task_name=task.name,
-                           form=form, users=project_users)
+                           form=form, users=project_users, current_user=current_user)
 
 
 @app.route("/project/<string:project_name>/<string:task_name>/delete", methods=['POST', 'GET'])
@@ -243,7 +248,8 @@ def delete_task(project_name, task_name):
         db.session.commit()
         flash('Your task has been deleted!', 'success')
         return redirect(url_for('project', project_name=project_name))
-    return render_template('deletetask.html', project_name=project_name, task_name=task_name)
+    return render_template('deletetask.html', project_name=project_name, task_name=task_name,
+                           current_user=current_user)
 
 
 @app.route("/redirect/<string:task_name>/")
