@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block left %}
+<span>Jump to</span>
+{% for project in projects%}
+    <a class="border-link" style="text-align:center;" href="{{ url_for('project', project_name=project.name) }}">
+      <div class="project-border px-2">
+        {{project.name}}
+      </div>
+    </a>
+{% endfor %}
+{% endblock %}
+
+{% block center %}
+<div class="row">
+  <div class="col-9">
+    <h1 class="title" style="font-size: 24px;">Projects where user is manager:</h1>
+  </div>
+</div>
+
+  <ul class="list-group" style="margin-top: 10px">
+    {% for project in projects%}
+    {% if project.manager.name == username %}
+    <a class="project-border-link" style="text-align:center;" href="{{ url_for('project', project_name=project.name) }}">
+      <div class="project-border px-2">
+        {{project.name}}
+      </div>
+    </a>
+    {% endif %}
+    {% endfor %}
+  </ul>
+
+<div class="row">
+  <div class="col-9">
+    <h1 class="title" style="font-size: 24px;">Tasks where user is executor:</h1>
+  </div>
+</div>
+
+  <ul class="list-group" style="margin-top: 10px">
+    {% for task in tasks%}
+    {% if task.executor == username %}
+    <a class="project-border-link" style="text-align:center;" href="{{ url_for('task_redirect', task_name=task.name) }}">
+      <div class="project-border px-2">
+        {{task.name}}
+      </div>
+    </a>
+    {% endif %}
+    {% endfor %}
+  </ul>
+{% endblock %}

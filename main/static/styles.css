@@ -77,3 +77,10 @@ form {
 {
     background-color: #943153;
 }
+
+.btn-task
+{
+    background-color: #943153;
+    position: absolute;
+    right: 10px;
+}

@@ -59,7 +59,7 @@ class Task(db.Model):
 
 
     def __repr__(self):
-        return f"Task name:('{self.name}', executor:'{self.manager}')"
+        return f"Task name:('{self.name}', executor:'{self.executor}', project_id: '{self.project_id}')"
 
     @property
     def serialize(self):

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block left %}
+<span>Jump to</span>
+{% for project in projects%}
+    <a class="border-link" style="text-align:center;" href="{{ url_for('project', project_name=project.name) }}">
+      <div class="project-border px-2">
+        {{project.name}}
+      </div>
+    </a>
+{% endfor %}
+{% endblock %}
+
+{% block center %}
+<div class="row">
+  <div class="col-9">
+    <h1 class="title" style="font-size: 24px;">The list of all users:</h1>
+  </div>
+</div>
+
+
+  <ul class="list-group" style="margin-top: 10px">
+    {% for user in users%}
+    <a class="project-border-link" style="text-align:center;" href="{{ url_for('userpage', user_name=user.name) }}">
+      <div class="project-border px-2">
+        {{user.name}}
+      </div>
+    </a>
+    {% endfor %}
+  </ul>
+{% endblock %}

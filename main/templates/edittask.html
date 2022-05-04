@@ -1,23 +1,17 @@
+
 {% extends "base.html" %}
 
 {% block left %}
   <span>Back to</span><br>
-    <span><a href="{{ url_for('project', project_name=project_name) }}">{{project_name}}</a></span><br>
+      <span><a href="{{ url_for('project', project_name=project_name) }}">{{project_name}}</a></span><br>
 {% endblock %}
 
 {% block center %}
-  <div class="row">
-    <div class="col">
-      <span class="title" style="font-size: 24px;">Add a new task</span>
-    </div>
-  </div>
-
 <div class="content-section">
         <form method="POST", action="">
-            {{ form.hidden_tag()}}
+            {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">New task</legend>
-                <div class="form-group">
+                 <div class="form-group">
                     {{ form.task_name.label(class="form-control-label") }}
                     {% if form.task_name.errors %}
                         {{ form.task_name(class="form-control form-control-lg is-invalid") }}
@@ -30,7 +24,7 @@
                         {{ form.task_name(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                <div class="form-group">
+                 <div class="form-group">
                     {{ form.task_description.label(class="form-control-label") }}
 
                     {% if form.task_description.errors %}
@@ -44,7 +38,6 @@
                         {{ form.task_description(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-
                 <div class="form-group" >
                     <label for="exec">Choose the executor of this project.</label>
                      <select name="executor" id="lang">
@@ -54,7 +47,7 @@
                       </select>
 
                 </div>
-                <div class="form-group">
+                 <div class="form-group">
                     {{ form.date_due.label(class="form-control-label") }}
 
                     {% if form.date_due.errors %}
@@ -70,9 +63,9 @@
                 </div>
             </fieldset>
             <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
+                <input class="btn btn-outline-info" id="submit" name="submit" type="submit" value="Edit project">
             </div>
         </form>
 </div>
-  </form>
+
 {% endblock %}
