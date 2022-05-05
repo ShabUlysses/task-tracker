@@ -19,7 +19,7 @@
         <a class="nav-link" href="/" style="color: white;">Manage Your Projects</a>
         <a class="nav-link" href="{{ url_for('users') }}" style="color: white;">Users</a>
         {% if current_user.is_admin %}
-        <a class="nav-link" href="{{ url_for('users') }}" style="color: white;">Create users</a>
+        <a class="nav-link" href="{{ url_for('create_users') }}" style="color: white;">Create users</a>
         {% endif %}
         <a class="nav-link ml-auto" href="{{ url_for('account') }}" style="color: white;">Account</a>
         <a class="nav-link" href="{{ url_for('logout') }}" style="color: white;">Log Out</a>

@@ -34,6 +34,9 @@ def users():
 @login_required
 def create_users():
     form = RegistrationForm()
+    if not current_user.is_admin:
+        flash('You are not allowed to view this page', 'danger')
+        return redirect(url_for('index'))
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(name=form.name.data, email=form.email.data.lower(), password=hashed_password)
