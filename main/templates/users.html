@@ -4,7 +4,7 @@
 <span>Jump to</span>
 {% for project in projects%}
     <a class="border-link" style="text-align:center;" href="{{ url_for('project', project_name=project.name) }}">
-      <div class="project-border px-2">
+      <div class="project-border px-2 py-2">
         {{project.name}}
       </div>
     </a>

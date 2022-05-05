@@ -120,6 +120,7 @@ def project(project_name):
 @login_required
 def new_project():
     form = ProjectForm()
+    users = User.query.all()
     if form.validate_on_submit():
         user_list = ', '.join(form.users.data)
         project = Project(name=form.project_name.data, content=form.content.data,
@@ -128,7 +129,7 @@ def new_project():
         db.session.commit()
         flash('Project has been successfully created!', 'success')
         return redirect(url_for('project', project_name=form.project_name.data))
-    return render_template('newproject.html', form=form, current_user=current_user)
+    return render_template('newproject.html', form=form, current_user=current_user, users=users)
 
 
 @app.route("/project/<string:project_name>/completion", methods=['POST', 'GET'])
@@ -152,6 +153,7 @@ def complete_project(project_name):
 @login_required
 def edit_project(project_name):
     project = Project.query.filter_by(name=project_name).first()
+    users = User.query.all()
     form = ProjectForm()
     if current_user != project.manager and not current_user.is_admin:
         flash('You are not authorized to edit this project', 'danger')
@@ -170,7 +172,7 @@ def edit_project(project_name):
         form.users.data = project.users
         form.date_due.data = project.date_end
     return render_template('editproject.html', project_name=project_name,
-                           form=form, current_user=current_user)
+                           form=form, current_user=current_user, users=users)
 
 
 @app.route("/project/<string:project_name>/delete", methods=['POST', 'GET'])
