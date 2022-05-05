@@ -29,12 +29,27 @@ def users():
     return render_template('users.html', projects=projects,
                            users=all_users, current_user=current_user)
 
+
+@app.route('/createusers', methods=['GET', 'POST'])
+@login_required
+def create_users():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(name=form.name.data, email=form.email.data.lower(), password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash('User has been successfully created.', 'success')
+        return redirect(url_for('create_users'))
+    return render_template('createusers.html', form=form)
+
 @app.route("/user/<string:user_name>")
 @login_required
 def userpage(user_name):
+    user = User.query.filter_by(name=user_name).first()
     projects = Project.query.all()
     tasks = Task.query.all()
-    return render_template('userpage.html', projects=projects,
+    return render_template('userpage.html', projects=projects, user=user,
                            username=user_name, tasks=tasks,
                            Project=Project, current_user=current_user)
 
@@ -115,7 +130,7 @@ def complete_project(project_name):
     if not all([task.completion for task in tasks]):
         flash('You cannot complete this project untill you complete all the tasks.', 'danger')
         return redirect(url_for('project', project_name=project_name))
-    if current_user != project.manager:
+    if current_user != project.manager and not current_user.is_admin:
         flash('You are not eligible to close this project.', 'danger')
         return redirect(url_for('project', project_name=project_name))
     project.completion = True
@@ -130,7 +145,7 @@ def complete_project(project_name):
 def edit_project(project_name):
     project = Project.query.filter_by(name=project_name).first()
     form = ProjectForm()
-    if current_user != project.manager:
+    if current_user != project.manager and not current_user.is_admin:
         flash('You are not authorized to edit this project', 'danger')
         return redirect(url_for('project', project_name=project_name))
     if form.validate_on_submit():
@@ -154,7 +169,7 @@ def edit_project(project_name):
 @login_required
 def delete_project(project_name):
     project = Project.query.filter_by(name=project_name).first()
-    if current_user != project.manager:
+    if current_user != project.manager and not current_user.is_admin:
         flash('You are not authorized to delete this project', 'danger')
         return redirect(url_for('project', project_name=project_name))
     if request.method == 'POST':
@@ -182,7 +197,7 @@ def new_task(project_name):
     project = Project.query.filter_by(name=project_name).first()
     project_users = project.users.split(',')
     form = TaskForm()
-    if current_user != project.manager:
+    if current_user != project.manager and not current_user.is_admin:
         flash('You cannot add tasks to this project.', 'danger')
         return redirect(url_for('project', project_name=project_name))
     if form.validate_on_submit():
@@ -191,7 +206,7 @@ def new_task(project_name):
         db.session.add(task)
         db.session.commit()
         flash('Task has been successfully created!', 'success')
-        return redirect(url_for('task', project_name=project.name, task_name=task.name))
+        return redirect(url_for('project', project_name=project.name, task_name=task.name))
     return render_template('newtask.html', form=form, users=project_users,
                            project_name=project.name, current_user=current_user)
 
@@ -201,7 +216,7 @@ def new_task(project_name):
 def complete_task(project_name, task_name):
     project = Project.query.filter_by(name=project_name).first()
     task = Task.query.filter_by(name=task_name).first()
-    if current_user != project.manager and current_user.name != task.executor:
+    if current_user != project.manager and current_user.name != task.executor and not current_user.is_admin:
         flash('You are not eligible to close this task.', 'danger')
         return redirect(url_for('task', project_name=project_name, task_name=task_name))
     task.completion = True
@@ -217,7 +232,7 @@ def edit_task(project_name, task_name):
     project = Project.query.filter_by(name=project_name).first()
     project_users = project.users.split(',')
     form = TaskForm()
-    if current_user != project.manager and current_user.name != task.executor:
+    if current_user != project.manager and current_user.name != task.executor and not current_user.is_admin:
         flash('You are not authorized to edit this task', 'danger')
         return redirect(url_for('task', project_name=project_name, task_name=task.name))
     if form.validate_on_submit():
@@ -240,7 +255,7 @@ def edit_task(project_name, task_name):
 def delete_task(project_name, task_name):
     task = Task.query.filter_by(name=task_name).first()
     project = Project.query.filter_by(id=task.project_id).first()
-    if current_user != project.manager and current_user.name != task.executor:
+    if current_user != project.manager and current_user.name != task.executor and not current_user.is_admin:
         flash('You are not authorized to delete this task', 'danger')
         return redirect(url_for('task', project_name=project_name, task_name=task_name))
     if request.method == 'POST':
