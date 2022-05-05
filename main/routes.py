@@ -5,21 +5,22 @@ from main import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
 
 
-
-
 @app.route("/")
 def hello():
     return redirect(url_for('index'))
 
+
 @app.route('/home')
 def home():
     return render_template('publicindex.html')
+
 
 @app.route('/index')
 @login_required
 def index():
     projects = Project.query.all()
     return render_template('index.html', projects=projects, current_user=current_user)
+
 
 @app.route('/users')
 @login_required
@@ -46,15 +47,18 @@ def create_users():
         return redirect(url_for('create_users'))
     return render_template('createusers.html', form=form)
 
+
 @app.route("/user/<string:user_name>")
 @login_required
 def userpage(user_name):
     user = User.query.filter_by(name=user_name).first()
     projects = Project.query.all()
     tasks = Task.query.all()
+
     return render_template('userpage.html', projects=projects, user=user,
                            username=user_name, tasks=tasks,
                            Project=Project, current_user=current_user)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -86,6 +90,7 @@ def login():
             flash('Login unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
 
+
 @app.route('/logout')
 def logout():
     logout_user()
@@ -97,6 +102,7 @@ def logout():
 def account():
     return render_template('account.html')
 
+
 @app.route('/project/<string:project_name>')
 @login_required
 def project(project_name):
@@ -107,7 +113,8 @@ def project(project_name):
     return render_template('project.html', projects=projects,
                            u_project_name=project.name, users=users,
                            manager=project.manager, content=project.content, start_date=project.date_created,
-                           end_date=project.date_end, tasks=tasks, complete=project.completion, current_user=current_user)
+                           end_date=project.date_end, tasks=tasks, complete=project.completion,
+                           current_user=current_user)
 
 
 @app.route("/project/new", methods=['POST', 'GET'])
@@ -140,7 +147,6 @@ def complete_project(project_name):
     db.session.commit()
     flash('The project has been marked as completed', 'success')
     return redirect(url_for('project', project_name=project_name))
-
 
 
 @app.route("/project/<string:project_name>/edit", methods=['POST', 'GET'])

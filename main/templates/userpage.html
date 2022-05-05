@@ -53,7 +53,7 @@
 
   <ul class="list-group" style="margin-top: 1px">
     {% for task in tasks%}
-    {% if task.executor == username %}
+    {% if task.executor.strip() == username %}
     <a class="project-border-link" style="text-align:center;" href="{{ url_for('task_redirect', task_name=task.name) }}">
       <div class="project-border px-2">
         {{task.name}}
