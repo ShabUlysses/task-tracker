@@ -108,10 +108,9 @@ def account():
 def project(project_name):
     projects = Project.query.all()
     project = Project.query.filter_by(name=project_name).first()
-    users = project.users.split(',')
     tasks = Task.query.filter_by(project_id=project.id)
     return render_template('project.html', projects=projects,
-                           u_project_name=project.name, users=users,
+                           u_project_name=project.name, users=project.users,
                            manager=project.manager, content=project.content, start_date=project.date_created,
                            end_date=project.date_end, tasks=tasks, complete=project.completion,
                            current_user=current_user)

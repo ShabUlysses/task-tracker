@@ -6,7 +6,7 @@
 <span>Jump to</span>
 {% for project in projects%}
     <a class="border-link" style="text-align:center;" href="{{ url_for('project', project_name=project.name) }}">
-      <div class="project-border px-2">
+      <div class="project-border px-2 py-2">
         {{project.name}}
       </div>
     </a>
@@ -71,8 +71,8 @@
 </div>
 
 <ul class="list-group">
-{% for user in users %}
-  <li class="list-group-item mb-1"><a href="{{ url_for('userpage', user_name=user) }}">{{user}}</a></li>
+{% for user in users.split(',') %}
+  <li class="list-group-item mb-1"><a href="{{ url_for('userpage', user_name=user.strip()) }}">{{user.strip()}}</a></li>
 {% endfor %}
 
 <!-- show a list of tasks within this project -->
