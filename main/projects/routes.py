@@ -1,3 +1,4 @@
+from random import choice
 from flask import Blueprint
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
