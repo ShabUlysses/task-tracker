@@ -3,7 +3,7 @@
 {% block left %}
 <span>Jump to</span>
 {% for project in projects%}
-    <a class="border-link" style="text-align:center;" href="{{ url_for('project', project_name=project.name) }}">
+    <a class="border-link" style="text-align:center;" href="{{ url_for('projects.project', project_name=project.name) }}">
       <div class="project-border px-2">
         {{project.name}}
       </div>
@@ -36,7 +36,7 @@
   <ul class="list-group" style="margin-top: 1px">
     {% for project in projects%}
     {% if project.manager.name == username %}
-    <a class="project-border-link" style="text-align:center;" href="{{ url_for('project', project_name=project.name) }}">
+    <a class="project-border-link" style="text-align:center;" href="{{ url_for('projects.project', project_name=project.name) }}">
       <div class="project-border px-2">
         {{project.name}}
       </div>
@@ -54,7 +54,7 @@
   <ul class="list-group" style="margin-top: 1px">
     {% for task in tasks%}
     {% if task.executor.strip() == username %}
-    <a class="project-border-link" style="text-align:center;" href="{{ url_for('task_redirect', task_name=task.name) }}">
+    <a class="project-border-link" style="text-align:center;" href="{{ url_for('tasks.task_redirect', task_name=task.name) }}">
       <div class="project-border px-2">
         {{task.name}}
       </div>

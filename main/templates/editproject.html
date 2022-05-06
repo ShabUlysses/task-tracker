@@ -4,7 +4,7 @@
 
 {% block left %}
   <span>Back to</span><br>
-      <span><a href="{{ url_for('project', project_name=project_name) }}">{{project_name}}</a></span><br>
+      <span><a href="{{ url_for('projects.project', project_name=project_name) }}">{{project_name}}</a></span><br>
 {% endblock %}
 
 {% block center %}

@@ -15,7 +15,7 @@
   <ul class="list-group" style="margin-top: 10px">
     {% for project in projects%}
     {% if not project.completion %}
-    <a class="project-border-link" style="text-align:center;" href="{{ url_for('project', project_name=project.name) }}">
+    <a class="project-border-link" style="text-align:center;" href="{{ url_for('projects.project', project_name=project.name) }}">
       <div class="project-border px-2">
         {{project.name}}
       </div>
@@ -29,7 +29,7 @@
   <ul class="list-group" style="margin-top: 10px">
     {% for project in projects%}
     {% if project.completion %}
-    <a class="project-border-link" style="text-align:center;" href="{{ url_for('project', project_name=project.name) }}">
+    <a class="project-border-link" style="text-align:center;" href="{{ url_for('projects.project', project_name=project.name) }}">
       <div class="project-border px-2">
         {{project.name}}
       </div>

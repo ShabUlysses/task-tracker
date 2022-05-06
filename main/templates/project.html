@@ -5,7 +5,7 @@
 {% block left %}
 <span>Jump to</span>
 {% for project in projects%}
-    <a class="border-link" style="text-align:center;" href="{{ url_for('project', project_name=project.name) }}">
+    <a class="border-link" style="text-align:center;" href="{{ url_for('projects.project', project_name=project.name) }}">
       <div class="project-border px-2 py-2">
         {{project.name}}
       </div>
@@ -21,19 +21,19 @@
   </div>
 
   <div class="col-3 new-project-button" style="text-align: right;">
-    <a class="btn btn-primary btn-sm" href="{{ url_for('new_task', project_name=u_project_name) }}">+ New Task</a>
+    <a class="btn btn-primary btn-sm" href="{{ url_for('tasks.new_task', project_name=u_project_name) }}">+ New Task</a>
   </div>
 </div>
 
 <!--<a href="/">Homepage</a> <br><br>-->
-<!--<a href="{{ url_for('new_task', project_name=project_name) }}">Add A New Task</a> <br><br>-->
+<!--<a href="{{ url_for('tasks.new_task', project_name=project_name) }}">Add A New Task</a> <br><br>-->
 {% if not complete %}
-<a class="btn btn-primary btn-sm" href="{{ url_for('complete_project', project_name=u_project_name) }}">Mark as complete</a>
-<a class="btn btn-primary btn-sm" href="{{ url_for('edit_project', project_name=u_project_name) }}">Edit</a>
+<a class="btn btn-primary btn-sm" href="{{ url_for('projects.complete_project', project_name=u_project_name) }}">Mark as complete</a>
+<a class="btn btn-primary btn-sm" href="{{ url_for('projects.edit_project', project_name=u_project_name) }}">Edit</a>
 {% else %}
 <a class="btn btn-primary btn-sm" style="color: white;" >This project is complete</a>
 {% endif %}
-<a class="btn btn-primary btn-sm"  href="{{ url_for('delete_project', project_name=u_project_name) }}">Delete</a>
+<a class="btn btn-primary btn-sm"  href="{{ url_for('projects.delete_project', project_name=u_project_name) }}">Delete</a>
 
 <!-- Content of this project -->
 <div class="row" >
@@ -72,7 +72,7 @@
 
 <ul class="list-group">
 {% for user in users.split(',') %}
-  <li class="list-group-item mb-1"><a href="{{ url_for('userpage', user_name=user.strip()) }}">{{user.strip()}}</a></li>
+  <li class="list-group-item mb-1"><a href="{{ url_for('users.userpage', user_name=user.strip()) }}">{{user.strip()}}</a></li>
 {% endfor %}
 
 <!-- show a list of tasks within this project -->
@@ -84,11 +84,11 @@
 
 <ul class="list-group">
 {% for task in tasks %}
-  <li class="list-group-item" style="font-size: 20px"><a href="{{ url_for('task', project_name=u_project_name, task_name=task.name) }}">{{task.name}}</a>
+  <li class="list-group-item" style="font-size: 20px"><a href="{{ url_for('tasks.task', project_name=u_project_name, task_name=task.name) }}">{{task.name}}</a>
     {% if not task.completion %}
-    <a class="btn-task btn-primary btn-sm" href="{{ url_for('complete_task', project_name=u_project_name, task_name=task.name) }}">Close the task</a></li>
+    <a class="btn-task btn-primary btn-sm" href="{{ url_for('tasks.complete_task', project_name=u_project_name, task_name=task.name) }}">Close the task</a></li>
     {% else %}
-    <a class="btn-task btn-primary btn-sm" href="{{ url_for('complete_task', project_name=u_project_name, task_name=task.name) }}">Task is closed</a></li>
+    <a class="btn-task btn-primary btn-sm" href="{{ url_for('tasks.complete_task', project_name=u_project_name, task_name=task.name) }}">Task is closed</a></li>
     {% endif %}
 {% endfor %}
 </ul>
