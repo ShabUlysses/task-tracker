@@ -22,11 +22,14 @@ Then, install plugins and packages that are necessary for this project to run:
 pip install -r requirements.txt
 ```
 
-Create .env file in root directory of the project. Inside .env file create variable SECRET_KEY and assign any key to it
+Create .env file in root directory of the project. Inside .env file create variable SECRET_KEY and assign any key to it.
+Also create variable SQLALCHEMY_DATABASE_URI = sqlite:///pmadpp.db
 
 ```
 Example:
 SECRET_KEY = 5122955e3bfb722eb16b7b7664fa9727
+
+SQLALCHEMY_DATABASE_URI = sqlite:///pmapp.db
 ```
 
 Then, run the application:
