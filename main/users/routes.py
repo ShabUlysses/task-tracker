@@ -1,10 +1,12 @@
+import os
 from flask import Blueprint
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, current_user, logout_user, login_required
 
-from main import db, bcrypt
+from main import db, bcrypt, app
 from main.models import User, Project, Task
-from main.users.forms import RegistrationForm, LoginForm
+from main.users.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from main.users.utils import save_picture
 
 users = Blueprint('users', __name__)
 
@@ -46,10 +48,24 @@ def logout():
     return redirect(url_for('core.home'))
 
 
-@users.route("/account")
+@users.route("/account", methods=["GET", 'POST'])
 @login_required
 def account():
-    return render_template('account.html')
+    form = UpdateAccountForm()
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
+        current_user.name = form.name.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Your account has been updated!', 'success')
+        return redirect(url_for('users.account'))
+    elif request.method == 'GET':
+        form.name.data = current_user.name
+        form.email.data = current_user.email
+    return render_template('account.html', form=form, image_file=image_file)
 
 
 @users.route('/accounts')
@@ -84,7 +100,7 @@ def userpage(user_name):
     user = User.query.filter_by(name=user_name).first()
     projects = Project.query.all()
     tasks = Task.query.all()
-
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('userpage.html', projects=projects, user=user,
-                           username=user_name, tasks=tasks,
+                           username=user_name, tasks=tasks, image_file=image_file,
                            Project=Project, current_user=current_user)
