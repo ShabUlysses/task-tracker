@@ -17,6 +17,7 @@
       <nav class="navbar nav-expand-md navbar-dark bg-primary">
         <!--<span class="navbar-brand">Manage Your Projects</span>-->
         <a class="nav-link" href="/" style="color: white;">Manage Your Projects</a>
+        <a class="nav-link" href="{{ url_for('projects.closed_projects') }}" style="color: white;">Closed projects</a>
         <a class="nav-link" href="{{ url_for('users.accounts') }}" style="color: white;">Users</a>
         {% if current_user.is_admin %}
         <a class="nav-link" href="{{ url_for('users.create_users') }}" style="color: white;">Create users</a>

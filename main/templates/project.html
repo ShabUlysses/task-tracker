@@ -4,13 +4,26 @@
 
 {% block left %}
 <span>Jump to</span>
-{% for project in projects%}
+{% for project in projects.items%}
   {% if not project.completion %}
     <a class="border-link" style="text-align:center;" href="{{ url_for('projects.project', project_name=project.name) }}">
       <div class="project-border px-2 py-2">
         {{project.name}}
       </div>
     </a>
+  {% endif %}
+{% endfor %}
+
+
+{% for page_num in projects.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+  {% if page_num %}
+    {% if projects.page == page_num %}
+      <a class="btn btn-info mb-4 py-0 px-1" href="{{ url_for('projects.project', project_name=u_project_name, page=page_num) }}">{{ page_num }}</a>
+    {% else %}
+      <a class="btn btn-outline-info mb-4 py-0 px-1" href="{{ url_for('projects.project', project_name=u_project_name, page=page_num) }}">{{ page_num }}</a>
+    {% endif %}
+  {% else %}
+    ...
   {% endif %}
 {% endfor %}
 {% endblock %}

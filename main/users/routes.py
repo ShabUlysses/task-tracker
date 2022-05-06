@@ -72,7 +72,8 @@ def account():
 @login_required
 def accounts():
     projects = Project.query.all()
-    all_users = User.query.all()
+    page = request.args.get('page', default=1, type=int)
+    all_users = User.query.paginate(page=page, per_page=5)
     return render_template('accounts.html', projects=projects,
                            users=all_users, current_user=current_user)
 

@@ -10,10 +10,22 @@ from main.projects.forms import ProjectForm
 projects = Blueprint('projects', __name__)
 
 
+@projects.route("/closedprojects")
+@login_required
+def closed_projects():
+    page = request.args.get('page', default=1, type=int)
+    closed_projects = Project.query.filter_by(completion=True)
+    projects = closed_projects.paginate(page=page, per_page=5)
+    return render_template('closedprojects.html', projects=projects, current_user=current_user)
+
+
 @projects.route('/project/<string:project_name>')
 @login_required
 def project(project_name):
-    projects = Project.query.all()
+    page = request.args.get('page', default=1, type=int)
+    open_projects = Project.query.filter_by(completion=False)
+    projects = open_projects.paginate(page=page, per_page=5)
+
     project = Project.query.filter_by(name=project_name).first()
     tasks = Task.query.filter_by(project_id=project.id)
     return render_template('project.html', projects=projects,
